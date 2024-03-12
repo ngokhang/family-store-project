@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hashPassword } from 'src/helpers';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 export class UserRepository extends Repository<UserEntity> {
   constructor(

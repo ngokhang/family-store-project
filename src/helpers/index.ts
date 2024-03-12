@@ -1,4 +1,4 @@
-import { hashSync, compareSync } from 'bcrypt';
+import { compareSync, hashSync } from 'bcrypt';
 
 export const hashPassword = (text: string) => {
   return hashSync(text, 10);

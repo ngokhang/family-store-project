@@ -23,4 +23,7 @@ export class UserEntity {
 
   @Column()
   phoneNumber: string;
+
+  @Column({ nullable: true, default: null })
+  refresh_token: string;
 }

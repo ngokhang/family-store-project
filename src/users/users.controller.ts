@@ -7,10 +7,10 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ResponseMessage } from 'src/interceptors/response-message.interceptor';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
-import { ResponseMessage } from 'src/interceptors/response-message.interceptor';
 
 @Controller('users')
 export class UsersController {
@@ -29,7 +29,7 @@ export class UsersController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
