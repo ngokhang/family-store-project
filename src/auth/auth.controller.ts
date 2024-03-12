@@ -5,6 +5,8 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './passport/local-strategy/local-auth.guard';
 import { PublicRoute } from 'src/decorators/PublicRoute.decorator';
+import { UserDecorator } from 'src/decorators/User.decorator';
+import { IUser } from 'src/users/interface/user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +25,14 @@ export class AuthController {
   @ResponseMessage('Tạo tài khoản mới')
   handleRegister(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
+  }
+
+  @Post('logout')
+  @ResponseMessage('Đăng xuất thành công')
+  handleLogout(
+    @UserDecorator() user: IUser,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.logout(user, res);
   }
 }
