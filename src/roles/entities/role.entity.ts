@@ -2,8 +2,7 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -18,7 +17,6 @@ export class RoleEntity {
   @Column()
   name: string;
 
-  @ManyToMany(() => UserEntity)
-  @JoinTable()
+  @OneToMany(() => UserEntity, (user) => user.role)
   users: UserEntity[];
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ResponseMessage } from 'src/interceptors/response-message.interceptor';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,18 +23,26 @@ export class UsersController {
   }
 
   @Get()
-  @ResponseMessage('Fetch all users')
-  findAll() {
-    return this.usersService.findAll();
+  @ResponseMessage('Danh sách người dùng')
+  findAll(@Query() queries: any) {
+    return this.usersService.findAll(queries);
+  }
+
+  @Get(':id')
+  @ResponseMessage('Thông tin người dùng')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOneById(id);
   }
 
   @Patch(':id')
+  @ResponseMessage('Cập nhật thông tin người dùng')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
+  @ResponseMessage('Xóa người dùng')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

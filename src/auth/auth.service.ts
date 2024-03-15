@@ -3,8 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import ms from 'ms';
-import { comparePassword } from 'src/helpers';
+import { comparePassword, hashPassword } from 'src/helpers';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { ChangePasswordDto } from 'src/users/dto/update-user.dto';
 import { IUser } from 'src/users/interface/user.interface';
 import { UsersService } from 'src/users/users.service';
 
@@ -86,5 +87,22 @@ export class AuthService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async changePasswod(userData: IUser, changePasswordDto: ChangePasswordDto) {
+    const user = await this.userService.findOneByAccount(userData.account);
+    const validPassword = comparePassword(
+      changePasswordDto.currentPassword,
+      user.password,
+    );
+
+    if (!validPassword) {
+      throw new BadRequestException('Mật khẩu hiện tại không chính xác');
+    }
+
+    return this.userService.updatePassword(
+      user.id,
+      hashPassword(changePasswordDto.newPassword),
+    );
   }
 }

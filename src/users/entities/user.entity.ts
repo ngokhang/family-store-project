@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { RoleEntity } from 'src/roles/entities/role.entity';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
 @Entity()
 @Unique(['id', 'account'])
@@ -24,6 +33,12 @@ export class UserEntity {
   @Column()
   phoneNumber: string;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true, default: null, select: false })
   refresh_token: string;
+
+  @DeleteDateColumn({ nullable: true, default: null })
+  deletedAt: Date;
+
+  @ManyToOne(() => RoleEntity, (role) => role.users)
+  role: RoleEntity;
 }

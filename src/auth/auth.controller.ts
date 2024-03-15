@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Put,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { ResponseMessage } from 'src/interceptors/response-message.interceptor';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -7,6 +15,7 @@ import { LocalAuthGuard } from './passport/local-strategy/local-auth.guard';
 import { PublicRoute } from 'src/decorators/PublicRoute.decorator';
 import { UserDecorator } from 'src/decorators/User.decorator';
 import { IUser } from 'src/users/interface/user.interface';
+import { ChangePasswordDto } from 'src/users/dto/update-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,5 +43,14 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return this.authService.logout(user, res);
+  }
+
+  @Put('change-password')
+  @ResponseMessage('Đổi mật khẩu')
+  handleChangePassword(
+    @UserDecorator() user: IUser,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changePasswod(user, changePasswordDto);
   }
 }
