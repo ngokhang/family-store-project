@@ -1,12 +1,13 @@
 import { RoleEntity } from 'src/roles/entities/role.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -35,6 +36,12 @@ export class UserEntity {
 
   @Column({ nullable: true, default: null, select: false })
   refresh_token: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @DeleteDateColumn({ nullable: true, default: null })
   deletedAt: Date;

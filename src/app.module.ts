@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
+import { ProductModule } from './product/product.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     RolesModule,
     AuthModule,
+    ProductModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

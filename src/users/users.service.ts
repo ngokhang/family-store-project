@@ -1,11 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { USER_ROLE } from 'src/constants';
+import { USER_ROLE, metadataResponseFetch } from 'src/constants';
 import { hashPassword } from 'src/helpers';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { paginationList } from 'src/utils';
 
 @Injectable()
 export class UsersService {
@@ -24,33 +25,19 @@ export class UsersService {
 
   async findAll(queries: any) {
     const { page, pageSize } = queries;
-    const totalItems = await this.userRepository.count();
-    const totalPages = Math.ceil(totalItems / pageSize);
-    const userList = await this.userRepository
-      .createQueryBuilder('user_entity')
-      .select([
-        'user_entity.id',
-        'user_entity.account',
-        'user_entity.firstName',
-        'user_entity.lastName',
-        'user_entity.phoneNumber',
-        'user_entity.address',
-      ])
-      .skip((page - 1) * pageSize)
-      .limit(pageSize)
-      .orderBy('user_entity.lastName', 'ASC')
+    const userList = await paginationList(
+      this.userRepository,
+      'user_entity',
+      queries,
+    )
       .leftJoinAndSelect('user_entity.role', 'role')
-      .getMany();
-    const metadata = {
-      page: Number(page),
-      pageSize: Number(pageSize),
-      total: totalItems,
-      pageCount: totalPages,
-    };
+      .orderBy('user_entity.createdAt', 'ASC')
+      .getManyAndCount();
+    const totalPages = Math.ceil(userList[1] / pageSize);
 
     return {
-      metadata,
-      result: userList,
+      metadata: metadataResponseFetch(page, pageSize, userList[1], totalPages),
+      result: userList[0],
     };
   }
 
