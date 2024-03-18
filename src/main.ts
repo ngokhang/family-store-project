@@ -2,9 +2,9 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
-import { TransformInterceptor } from './interceptors/transform.interceptor';
-import { JwtAuthGuard } from './auth/passport/jwt/jwt-auth.guard';
 import cookieParser from 'cookie-parser';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { JwtAuthGuard } from './models/auth/passport/jwt/jwt-auth.guard';
 
 async function bootstrap() {
   const compression = require('compression');
