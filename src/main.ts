@@ -8,7 +8,10 @@ import { JwtAuthGuard } from './models/auth/passport/jwt/jwt-auth.guard';
 
 async function bootstrap() {
   const compression = require('compression');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+    logger: ['error'],
+  });
   const reflector = app.get(Reflector);
   app.use(helmet());
   app.use(cookieParser());
@@ -24,6 +27,13 @@ async function bootstrap() {
     }),
   );
   app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.enableCors({
+    origin: true,
+    methods: ['GET', 'HEAD', 'POST', 'PATCH', 'PUT', 'DELETE'],
+    preflightContinue: false,
+    credentials: true,
+  });
+
   app.use(compression());
   await app.listen(8000);
 }

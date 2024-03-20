@@ -5,10 +5,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -52,6 +50,6 @@ export class UserEntity {
 
   @ManyToOne(() => RoleEntity, (role) => role.users)
   role: RoleEntity;
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.user, { cascade: true })
   orders: Order[];
 }

@@ -1,11 +1,13 @@
 import { Product } from 'src/models/product/entities/product.entity';
+import { ProductToOrder } from 'src/models/productToOrder/productToOrder.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -17,17 +19,11 @@ export class Order {
   @Column({ type: 'uuid', nullable: false })
   userId: string;
 
-  @Column()
-  productName: string;
+  @Column({ unsigned: true, default: 0 })
+  quantity: number;
 
   @Column()
-  productQuantity: number;
-
-  @Column()
-  inputPrice: number;
-
-  @Column()
-  price: number;
+  totalPrice: number;
 
   @Column({
     type: 'timestamp',
@@ -43,7 +39,7 @@ export class Order {
   })
   updatedAt: Date;
 
-  @Column({
+  @DeleteDateColumn({
     type: 'timestamp',
     nullable: true,
   })
@@ -51,7 +47,9 @@ export class Order {
 
   @ManyToOne(() => UserEntity, (user) => user.orders)
   user: UserEntity;
-  @ManyToMany(() => Product)
-  @JoinTable()
-  product: Product;
+
+  @OneToMany(() => ProductToOrder, (productToOrder) => productToOrder.order, {
+    cascade: true,
+  })
+  productToOrder: ProductToOrder[];
 }

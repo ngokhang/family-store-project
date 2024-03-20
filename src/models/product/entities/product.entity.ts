@@ -1,4 +1,6 @@
 import { Category } from 'src/models/categories/entities/category.entity';
+import { Order } from 'src/models/orders/entities/order.entity';
+import { ProductToOrder } from 'src/models/productToOrder/productToOrder.entity';
 import {
   Column,
   CreateDateColumn,
@@ -6,6 +8,8 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,9 +24,6 @@ export class Product {
 
   @Column({ type: 'bigint', unsigned: true, default: 0 })
   inputPrice: number;
-
-  @Column({ type: 'bigint', unsigned: true, default: 0 })
-  price: number;
 
   @Column({ nullable: true, default: null })
   description: string;
@@ -46,4 +47,7 @@ export class Product {
   @ManyToMany(() => Category, (category) => category.products)
   @JoinTable()
   categories: Category[];
+
+  @OneToMany(() => ProductToOrder, (productToOrder) => productToOrder.product)
+  productToOrder: ProductToOrder[];
 }
